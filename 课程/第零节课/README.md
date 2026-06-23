@@ -41,7 +41,7 @@
 **课前只需要完成三件事：**
 
 1. 安装 Miniconda
-2. 创建 `dl-course` 环境（Python 3.10）
+2. 创建 `dl-course` 环境（Python 3.12）
 3. 安装 PyTorch（带 CUDA 或 CPU 版本）
 
 具体命令见 `环境安装指南.md`。
@@ -57,7 +57,7 @@ python check_env.py
 只要看到以下输出即表示课前准备完成：
 
 ```
-✓ Python 3.10.x
+✓ Python 3.12.x
 ✓ PyTorch x.x.x
   → CUDA 可用: ...（CPU 用户会提示使用 CPU）
 ✓ torchvision x.x.x

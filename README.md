@@ -33,7 +33,7 @@
 
 ## 环境要求
 
-- Python 3.9 - 3.11（推荐 3.10）
+- Python 3.11 - 3.13（推荐 3.12）
 - PyTorch + CUDA（可选，CPU/MPS 也可运行）
 - 课前只需装好 Miniconda + PyTorch + 最基础库
 - 课程所需库的安装说明见 `第零节课/环境安装指南.md`
