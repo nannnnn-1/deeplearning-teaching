@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# 数据和输出（不应上传到仓库）
+data/
+outputs/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+*.h5
+*.onnx
+
+# 模型缓存
+.cache/
+~/.cache/
+*.tar.gz
+*.zip
+
+# 环境
+.env
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log
+logs/
