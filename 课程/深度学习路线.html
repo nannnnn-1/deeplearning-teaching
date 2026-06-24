@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>深度学习全景图谱 · 讲师版</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;background:#fefcf8;color:#2d2a26;line-height:1.7}
+
+header{position:fixed;top:0;left:0;right:0;background:rgba(255,252,248,0.92);backdrop-filter:blur(12px);border-bottom:1px solid #f0ebe3;z-index:100}
+.header-inner{max-width:1100px;margin:0 auto;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-icon{width:38px;height:38px;background:#c25e00;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:16px}
+.logo-text{font-weight:700;font-size:16px;color:#2d2a26}
+.header-actions{display:flex;gap:10px;align-items:center}
+.btn{padding:7px 16px;border-radius:8px;border:1px solid #e8e0d5;font-size:15px;font-weight:500;cursor:pointer;background:#fff;color:#5a4f42;transition:all 0.2s}
+.btn:hover{background:#f5f0e8}
+.btn-primary{background:#c25e00;border-color:#c25e00;color:#fff}
+.btn-primary:hover{background:#a84d00}
+.btn-notes{background:#faf7f2;border-color:#e0d7cc;color:#6b5f52}
+.btn-notes:hover{background:#f0ebe3}
+.search-box{padding:8px 14px 8px 38px;border-radius:10px;border:1px solid #e8e0d5;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a89f91' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='M21 21l-4.35-4.35'/%3E%3C/svg%3E") no-repeat 12px center;font-size:16px;width:220px;outline:none;color:#2d2a26}
+.search-box:focus{border-color:#c25e00}
+
+.banner{background:linear-gradient(135deg,#f5efe6,#e8dfd3);border-bottom:1px solid #e8e0d5;padding-top:60px}
+.banner-inner{max-width:1100px;margin:0 auto;padding:36px 24px 28px}
+.banner-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
+.banner h1{font-size:42px;font-weight:800;color:#2d2a26;letter-spacing:-0.5px;margin-bottom:10px}
+.banner p{font-size:18px;color:#5a4f42;line-height:1.8;max-width:560px}
+.banner-badge{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #e8e0d5;border-radius:20px;padding:5px 14px;font-size:15px;color:#5a4f42;font-weight:500}
+.badge-dot{width:8px;height:8px;border-radius:50%}
+.course-coverage{background:#fff;border:1px solid #e8e0d5;border-radius:14px;padding:18px 22px;max-width:340px;flex-shrink:0}
+.course-coverage h3{font-size:16px;font-weight:700;color:#2d2a26;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.coverage-bar{height:8px;background:#f0ebe3;border-radius:4px;overflow:hidden;margin-bottom:8px}
+.coverage-fill{height:100%;background:#c25e00;border-radius:4px;width:58%;transition:width 0.8s ease}
+.coverage-text{font-size:15px;color:#8a7f72}
+.coverage-text strong{color:#c25e00}
+
+main{max-width:1100px;margin:0 auto;padding:28px 24px 60px}
+
+.layer{background:#fff;border-radius:16px;border:1px solid #f0ebe3;margin-bottom:14px;overflow:hidden;box-shadow:0 1px 3px rgba(45,42,38,0.03);transition:box-shadow 0.2s}
+.layer:hover{box-shadow:0 2px 8px rgba(45,42,38,0.06)}
+.layer.in-course{border-left:4px solid #c25e00}
+.layer-header{padding:18px 22px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.layer-header:hover{background:#fef9f3}
+.layer-header-left{display:flex;align-items:center;gap:14px}
+.layer-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;flex-shrink:0}
+.layer-title{font-weight:700;font-size:18px;color:#2d2a26}
+.layer-meta{font-size:15px;color:#a89f91;margin-top:2px}
+.layer-course-tag{font-size:13px;padding:3px 10px;border-radius:20px;background:#fff8f0;color:#c25e00;font-weight:600;margin-left:10px;border:1px solid #f5e0cc}
+.layer-arrow{width:30px;height:30px;border-radius:50%;background:#f5f0e8;display:flex;align-items:center;justify-content:center;color:#8a7f72;transition:transform 0.3s}
+.layer.expanded .layer-arrow{transform:rotate(180deg)}
+.layer-content{max-height:0;overflow:hidden;transition:max-height 0.5s ease;padding:0 22px}
+.layer.expanded .layer-content{max-height:99999px;padding:0 22px 20px}
+
+.section{background:#fefcf8;border-radius:12px;padding:16px 18px;margin-bottom:10px;border:1px solid #f5efe6}
+.section-title{font-weight:700;font-size:16px;margin-bottom:12px;color:#2d2a26;display:flex;align-items:center;gap:8px}
+.section-title::before{content:"";width:5px;height:16px;border-radius:3px;background:currentColor}
+.section-desc{font-size:15px;color:#8a7f72;margin-bottom:12px;line-height:1.6;padding-left:13px;border-left:2px solid #e8e0d5}
+
+.item{padding:10px 0;border-bottom:1px solid #f5efe6;display:flex;align-items:flex-start;gap:10px}
+.item:last-child{border-bottom:none}
+.item-marker{width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;margin-top:2px}
+.item-body{flex:1}
+.item-name{font-size:16px;font-weight:600;color:#2d2a26;margin-bottom:3px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.item-desc{font-size:15px;color:#5a4f42;line-height:1.6}
+.item-course{font-size:13px;padding:2px 8px;border-radius:10px;background:#fff8f0;color:#c25e00;border:1px solid #f5e0cc;font-weight:600;white-space:nowrap}
+
+/* ── 讲师备注 ── */
+.item-note-toggle{display:inline-flex;align-items:center;gap:3px;font-size:12px;padding:2px 10px;border-radius:12px;border:1px solid #e0d7cc;background:#faf7f2;color:#8a7f72;cursor:pointer;transition:all 0.2s;white-space:nowrap;margin-left:4px}
+.item-note-toggle:hover{background:#fff8f0;color:#c25e00;border-color:#f5d0a0}
+.item-note-toggle.active{background:#fff8f0;color:#c25e00;border-color:#f5d0a0}
+.item-note-toggle svg{transition:transform 0.3s;width:10px;height:10px}
+.item-note-toggle.active svg{transform:rotate(180deg)}
+.item-note{max-height:0;overflow:hidden;transition:max-height 0.45s ease;margin-top:0}
+.item-note.expanded{max-height:4000px;margin-top:10px}
+.item-note-inner{background:linear-gradient(135deg,#fdfaf5,#f8f4ec);border:1px solid #ede4d5;border-radius:10px;padding:14px 16px;font-size:15px;line-height:1.9;color:#4a4238}
+.item-note-inner strong{color:#c25e00}
+
+mark{background:#fef08a;color:#854d0e;padding:1px 3px;border-radius:3px;font-weight:600}
+.no-results{text-align:center;padding:40px;color:#a89f91;font-size:17px}
+
+.paths-title{font-size:26px;font-weight:700;color:#2d2a26;margin:40px 0 20px;display:flex;align-items:center;gap:10px}
+.paths-title::before{content:"";width:4px;height:24px;background:#c25e00;border-radius:4px}
+.path-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.path-card{background:#fff;border-radius:14px;padding:18px;border:1px solid #f0ebe3;transition:all 0.2s;cursor:pointer}
+.path-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(45,42,38,0.08);border-color:#e8e0d5}
+.path-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.path-name{font-weight:700;font-size:17px;color:#2d2a26}
+.path-tag{font-size:13px;padding:3px 10px;border-radius:6px;background:#f5f0e8;color:#5a4f42;font-weight:500}
+.path-desc{font-size:15px;color:#8a7f72;margin-bottom:12px;line-height:1.6}
+.path-route{font-size:14px;background:#fefcf8;padding:10px 12px;border-radius:8px;color:#5a4f42;border:1px solid #f5efe6;line-height:1.8}
+.path-route b{color:#c25e00}
+
+.resources-title{font-size:26px;font-weight:700;color:#2d2a26;margin:40px 0 20px;display:flex;align-items:center;gap:10px}
+.resources-title::before{content:"";width:4px;height:24px;background:#0d7377;border-radius:4px}
+.resources-card{background:#fff;border-radius:16px;padding:24px;border:1px solid #f0ebe3}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+.res-item h4{font-size:16px;font-weight:700;margin-bottom:10px;color:#2d2a26;display:flex;align-items:center;gap:6px}
+.res-item ul{list-style:none}
+.res-item li{font-size:15px;color:#5a4f42;padding:5px 0;padding-left:16px;position:relative}
+.res-item li::before{content:"▸";position:absolute;left:0;color:#c25e00;font-size:12px}
+.res-item .res-note{font-size:14px;color:#a89f91;margin-top:6px;font-style:italic}
+
+.footer-tip{margin-top:40px;padding:20px 24px;background:#fff;border:1px solid #f0ebe3;border-radius:14px;display:flex;align-items:center;gap:16px}
+.footer-tip-icon{font-size:28px}
+.footer-tip-text{font-size:16px;color:#5a4f42;line-height:1.7}
+.footer-tip-text strong{color:#c25e00}
+
+.back-to-top{position:fixed;bottom:24px;right:24px;width:44px;height:44px;background:#c25e00;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;border:none;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:99;cursor:pointer;box-shadow:0 4px 12px rgba(194,94,0,0.3);font-size:18px}
+.back-to-top.visible{opacity:1;pointer-events:auto}
+
+@media(max-width:768px){
+.header-inner{padding:0 16px}
+.banner-top{flex-direction:column}
+.course-coverage{max-width:100%}
+.search-box{width:140px}
+main{padding:20px 16px 40px}
+.path-grid{grid-template-columns:1fr}
+.res-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="header-inner">
+<div class="logo">
+<div class="logo-icon">DL</div>
+<div class="logo-text">深度学习全景图谱</div>
+</div>
+<div class="header-actions">
+<input type="text" class="search-box" id="searchBox" placeholder="搜索知识点...">
+<button class="btn btn-notes" id="btnExpandNotes">展开全部备注</button>
+<button class="btn btn-notes" id="btnCollapseNotes">折叠全部备注</button>
+<button class="btn" id="btnExpand">展开层级</button>
+<button class="btn" id="btnCollapse">折叠层级</button>
+<button class="btn btn-primary" id="btnCourseOnly">只看课程覆盖</button>
+</div>
+</div>
+</header>
+
+<div class="banner">
+<div class="banner-inner">
+<div class="banner-top">
+<div>
+<h1>深度学习全景图谱 · 讲师版</h1>
+<p>覆盖从数学基础到前沿研究的 <strong>12 层</strong>完整知识体系。点击各层级展开，每个知识点附带<strong>一句话直觉</strong>和<strong>讲师展开备注</strong>——直觉解释、技术要点、实际应用三合一，足以支撑 60 分钟全景讲解。</p>
+<div class="banner-badge">
+<span class="badge"><span class="badge-dot" style="background:#c25e00"></span>12 大知识层级</span>
+<span class="badge"><span class="badge-dot" style="background:#0d7377"></span>108 个核心知识点</span>
+<span class="badge"><span class="badge-dot" style="background:#b85c5c"></span>6 条学习路径</span>
+<span class="badge"><span class="badge-dot" style="background:#4a7c59"></span>每点含讲师备注</span>
+</div>
+</div>
+<div class="course-coverage">
+<h3>📍 本课程覆盖范围</h3>
+<div class="coverage-bar"><div class="coverage-fill" id="coverageFill"></div></div>
+<div class="coverage-text"><strong>6 / 12</strong> 层重点覆盖（第 1–21 节课）<br>覆盖 L3–L7、L11 共 6 层 · 其余层第一节课全面介绍</div>
+</div>
+</div>
+</div>
+</div>
+
+<main>
+<div id="layers"></div>
+
+<div class="paths-title">推荐学习路径</div>
+<div class="path-grid" id="paths"></div>
+
+<div class="resources-title">学习资源推荐</div>
+<div class="resources-card">
+<div class="res-grid">
+<div class="res-item">
+<h4>📚 经典课程</h4>
+<ul>
+<li>CS231n（斯坦福计算机视觉）</li>
+<li>CS224n（斯坦福自然语言处理）</li>
+<li>李宏毅机器学习（中文首选）</li>
+<li>Fast.ai（实战导向）</li>
+</ul>
+<div class="res-note">CS231n 作业设计极佳，李宏毅每年更新覆盖 Transformer/Diffusion</div>
+</div>
+<div class="res-item">
+<h4>📖 必读书籍</h4>
+<ul>
+<li>《深度学习》（花书）— 理论圣经</li>
+<li>《动手学深度学习》— 代码实践首选</li>
+<li>《Pattern Recognition and ML》— 经典</li>
+<li>《Machine Learning Yearning》— 工程视角</li>
+</ul>
+<div class="res-note">花书当字典查，动手学深度学习跟着敲代码</div>
+</div>
+<div class="res-item">
+<h4>🔬 论文与社区</h4>
+<ul>
+<li>arXiv.org — 最新预印本</li>
+<li>Papers With Code — 论文+代码一站式</li>
+<li>Hugging Face — 模型与数据集</li>
+<li>AK 的 YouTube / Twitter — 前沿追踪</li>
+</ul>
+<div class="res-note">养成每天刷 arXiv 的习惯，用 Papers With Code 复现</div>
+</div>
+<div class="res-item">
+<h4>💻 实践平台</h4>
+<ul>
+<li>Kaggle — 数据竞赛入门</li>
+<li>GitHub — 开源项目复现</li>
+<li>Google Colab — 免费 T4 GPU</li>
+<li>GitHub Copilot — 辅助编码</li>
+</ul>
+<div class="res-note">Colab 是本课程的官方备选方案，所有代码可运行</div>
+</div>
+</div>
+</div>
+
+<div class="footer-tip">
+<div class="footer-tip-icon">💡</div>
+<div class="footer-tip-text">
+<strong>给讲师的提示：</strong>每个知识点旁有 <strong>📝 备注</strong>按钮，点击展开包含直觉解释、技术要点和实际应用的详细讲师备注。点「展开全部备注」可一次性展开所有备注内容，方便备课时全文通读。搜索框支持实时搜索所有知识点。
+</div>
+</div>
+</main>
+
+<button class="back-to-top" id="btt">↑</button>
+
+<script src="深度学习路线_data.js"></script>
+<script>
+function render() {
+  var lc = document.getElementById('layers');
+  var html = '';
+  for (var i = 0; i < data.length; i++) {
+    var l = data[i];
+    var inCourseClass = l.inCourse ? 'in-course' : '';
+    var courseTag = l.inCourse ? '<span class="layer-course-tag">本课程覆盖</span>' : '';
+    html += '<div id="' + l.id + '" class="layer ' + inCourseClass + '">';
+    html += '<div class="layer-header" onclick="toggleLayer(\'' + l.id + '\')">';
+    html += '<div class="layer-header-left">';
+    html += '<div class="layer-icon" style="background:' + l.c + '">' + l.i + '</div>';
+    html += '<div>';
+    html += '<div style="display:flex;align-items:center;gap:8px">';
+    html += '<div class="layer-title">' + l.t + '</div>' + courseTag;
+    html += '</div>';
+    html += '<div class="layer-meta">' + l.s.length + ' 个知识模块 · 点击展开</div>';
+    html += '</div></div>';
+    html += '<div class="layer-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>';
+    html += '</div>';
+    html += '<div class="layer-content">';
+    for (var si = 0; si < l.s.length; si++) {
+      var sec = l.s[si];
+      var color = l.c;
+      html += '<div class="section" style="border-color:' + color + '20">';
+      html += '<div class="section-title" style="color:' + color + '">' + sec.t + '</div>';
+      if (sec.desc) {
+        html += '<div class="section-desc">' + sec.desc + '</div>';
+      }
+      for (var ii = 0; ii < sec.items.length; ii++) {
+        var item = sec.items[ii];
+        var itemCourseTag = item.course ? '<span class="item-course" title="对应课次">' + item.course + '</span>' : '';
+        var noteId = 'note_' + l.id + '_' + si + '_' + ii;
+        var searchText = (item.n + ' ' + item.d + ' ' + (item.note || '')).toLowerCase().replace(/"/g, '&quot;');
+        html += '<div class="item" data-search="' + searchText + '">';
+        html += '<div class="item-marker" style="background:' + color + '">' + (si + 1) + '.' + (ii + 1) + '</div>';
+        html += '<div class="item-body">';
+        html += '<div class="item-name">' + item.n + ' ' + itemCourseTag;
+        if (item.note) {
+          html += '<span class="item-note-toggle" onclick="event.stopPropagation(); toggleNote(\'' + noteId + '\', this)" title="展开/折叠讲师备注">';
+          html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg> 备注';
+          html += '</span>';
+        }
+        html += '</div>';
+        html += '<div class="item-desc">' + item.d + '</div>';
+        if (item.note) {
+          html += '<div class="item-note" id="' + noteId + '">';
+          html += '<div class="item-note-inner">' + item.note + '</div>';
+          html += '</div>';
+        }
+        html += '</div></div>';
+      }
+      html += '</div>';
+    }
+    html += '</div></div>';
+  }
+  lc.innerHTML = html;
+
+  var pc = document.getElementById('paths');
+  var pathsHtml = '';
+  for (var pi = 0; pi < pathsData.length; pi++) {
+    var p = pathsData[pi];
+    var borderColor = courseColors[p.cls] || '#e8e0d5';
+    var routeHtml = p.r.replace(/（第[\d\-]+节）/g, '<b>$&</b>');
+    pathsHtml += '<div class="path-card" style="border-top:3px solid ' + borderColor + '">';
+    pathsHtml += '<div class="path-header">';
+    pathsHtml += '<span class="path-name">' + p.n + '</span>';
+    pathsHtml += '<span class="path-tag" style="background:' + borderColor + '15;color:' + borderColor + '">路径</span>';
+    pathsHtml += '</div>';
+    pathsHtml += '<div class="path-desc">' + p.d + '</div>';
+    pathsHtml += '<div class="path-route">' + routeHtml + '</div>';
+    pathsHtml += '</div>';
+  }
+  pc.innerHTML = pathsHtml;
+}
+
+function toggleLayer(id) {
+  var el = document.getElementById(id);
+  el.classList.toggle('expanded');
+}
+
+function toggleNote(noteId, btn) {
+  var el = document.getElementById(noteId);
+  if (!el) return;
+  el.classList.toggle('expanded');
+  btn.classList.toggle('active');
+}
+
+function expandAllLayers() {
+  var layers = document.querySelectorAll('.layer');
+  for (var i = 0; i < layers.length; i++) layers[i].classList.add('expanded');
+}
+function collapseAllLayers() {
+  var layers = document.querySelectorAll('.layer');
+  for (var i = 0; i < layers.length; i++) layers[i].classList.remove('expanded');
+}
+function expandCourseOnly() {
+  collapseAllLayers();
+  for (var i = 0; i < data.length; i++) {
+    if (data[i].inCourse) {
+      var el = document.getElementById(data[i].id);
+      if (el) el.classList.add('expanded');
+    }
+  }
+  var first = document.querySelector('.layer.in-course');
+  if (first) first.scrollIntoView({behavior: 'smooth', block: 'center'});
+}
+
+function expandAllNotes() {
+  var notes = document.querySelectorAll('.item-note');
+  var toggles = document.querySelectorAll('.item-note-toggle');
+  for (var i = 0; i < notes.length; i++) notes[i].classList.add('expanded');
+  for (var i = 0; i < toggles.length; i++) toggles[i].classList.add('active');
+}
+function collapseAllNotes() {
+  var notes = document.querySelectorAll('.item-note');
+  var toggles = document.querySelectorAll('.item-note-toggle');
+  for (var i = 0; i < notes.length; i++) notes[i].classList.remove('expanded');
+  for (var i = 0; i < toggles.length; i++) toggles[i].classList.remove('active');
+}
+
+function doSearch() {
+  var q = document.getElementById('searchBox').value.toLowerCase().trim();
+  var items = document.querySelectorAll('.item');
+  var sections = document.querySelectorAll('.section');
+  var layers = document.querySelectorAll('.layer');
+
+  if (!q) {
+    for (var i = 0; i < items.length; i++) items[i].style.display = '';
+    for (var i = 0; i < sections.length; i++) sections[i].style.display = '';
+    for (var i = 0; i < layers.length; i++) layers[i].style.display = '';
+    return;
+  }
+
+  for (var i = 0; i < items.length; i++) {
+    var txt = items[i].getAttribute('data-search') || '';
+    items[i].style.display = txt.indexOf(q) >= 0 ? '' : 'none';
+  }
+  for (var i = 0; i < sections.length; i++) {
+    var visible = sections[i].querySelectorAll('.item:not([style*="display: none"])');
+    sections[i].style.display = visible.length > 0 ? '' : 'none';
+  }
+  for (var i = 0; i < layers.length; i++) {
+    var visible = layers[i].querySelectorAll('.section:not([style*="display: none"])');
+    layers[i].style.display = visible.length > 0 ? '' : 'none';
+    if (visible.length > 0) layers[i].classList.add('expanded');
+  }
+}
+
+document.getElementById('btnExpand').addEventListener('click', expandAllLayers);
+document.getElementById('btnCollapse').addEventListener('click', collapseAllLayers);
+document.getElementById('btnCourseOnly').addEventListener('click', expandCourseOnly);
+document.getElementById('btnExpandNotes').addEventListener('click', expandAllNotes);
+document.getElementById('btnCollapseNotes').addEventListener('click', collapseAllNotes);
+document.getElementById('searchBox').addEventListener('input', doSearch);
+
+window.addEventListener('scroll', function() {
+  var btt = document.getElementById('btt');
+  if (window.scrollY > 400) btt.classList.add('visible');
+  else btt.classList.remove('visible');
+});
+document.getElementById('btt').addEventListener('click', function() {
+  window.scrollTo({top: 0, behavior: 'smooth'});
+});
+
+render();
+setTimeout(function() {
+  var courseLayers = document.querySelectorAll('.layer.in-course');
+  for (var i = 0; i < courseLayers.length; i++) courseLayers[i].classList.add('expanded');
+  document.getElementById('coverageFill').style.width = '58%';
+}, 200);
+</script>
+</body>
+</html>
